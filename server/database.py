@@ -1,5 +1,6 @@
-const mongoose = require('mongoose');
+from pymongo import MongoClient
 
-const main = async() => {
-  await mongoose.connect('mongodb://127.0.0.1:27017/fetcher');
-};
+client = MongoClient("mongodb://localhost:27017") #might need /fetcher?
+db = client['mind_palace']
+collection = db['users']
+# need to connect to db?
