@@ -1,7 +1,7 @@
 import os
 import json
 from openai import Configuration, OpenAIApi
-from models import getSongs, saveSong, deleteSong, updateSong, updateNotes, createUser
+from models import get_songs, save_song, delete_song, create_user
 
 configuration = Configuration(
     api_key=os.environ.get('API_KEY')
@@ -55,20 +55,20 @@ def create_user(req, res):
     email = req.get('email', '')
     password = req.get('password', '')
 
-    createUser(email, password)
+    create_user(email, password)
 
     res.status(201)
 
 def get_songs(req, res):
     email = req.query.get('email', '')
 
-    result = getSongs(email)
+    result = get_songs(email)
     songs = result.get('songs', [])
 
     res.status(200).json(songs)
 
 def add_song(req, res):
-    saveSong(req)
+    save_song(req)
     res.status(201)
 
 def delete_song(req, res):
@@ -76,25 +76,25 @@ def delete_song(req, res):
     song = req.get('song', '')
     artist = req.get('artist', '')
 
-    deleteSong(email, song, artist)
+    delete_song(email, song, artist)
     res.status(203)
 
-def update_song(req, res):
-    email = req.get('email', '')
-    song = req.get('song', '')
-    artist = req.get('artist', '')
+# def update_song(req, res):
+#     email = req.get('email', '')
+#     song = req.get('song', '')
+#     artist = req.get('artist', '')
 
-    updateSong(email, song, artist)
-    res.status(202)
+#     updateSong(email, song, artist)
+#     res.status(202)
 
-def update_notes(req, res):
-    email = req.get('email', '')
-    song = req.get('song', '')
-    artist = req.get('artist', '')
-    notes = req.get('notes', '')
+# def update_notes(req, res):
+#     email = req.get('email', '')
+#     song = req.get('song', '')
+#     artist = req.get('artist', '')
+#     notes = req.get('notes', '')
 
-    updateNotes(email, song, artist, notes)
-    res.status(202)
+#     updateNotes(email, song, artist, notes)
+#     res.status(202)
 
 def generate_prompt(band, instrument='guitar', difficulty='beginner'):
     capitalized_band = band[0].upper() + band[1:].lower()
