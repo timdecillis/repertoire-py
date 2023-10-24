@@ -1,22 +1,26 @@
-const database = require('./database.js');
-const mongoose = require('mongoose');
+from database import collection
 
-mongoose.connect('mongodb://127.0.0.1:27017/repertoire');
+def create_user (email, password):
+   data = {email: email, password: password}
+   result = collection.insert_one(data)
+   return result.inserted_id
 
-const repertoireSchema = new mongoose.Schema({
-  email: String,
-  password: String,
-  songs: []
-});
+def save_song (req):
+   email = req['email']
+   song = req['song']
+   artist = req['artist']
 
-const User = mongoose.model('User', repertoireSchema);
+   found_user = collection.find_one({'email': email})
+   if found_user:
+      found_user['songs'].append({
+         'name': song,
+         'artist': artist,
+         'completed': False,
+         'notes': ''
+         })
+      collection.update_one({'email': email}, {'$set': found_user})
 
-module.exports = {
-
-  createUser: (email, password) => {
-    return new User({ email: email, password: password })
-      .save();
-  },
+'''
   saveSong: (req) => {
     let { email, song, artist } = req;
     return User.findOne({ email: email })
@@ -55,3 +59,4 @@ module.exports = {
     return User.findOneAndUpdate(query, update, { new: true });
   }
 };
+'''
