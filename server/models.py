@@ -20,43 +20,13 @@ def save_song (req):
          })
       collection.update_one({'email': email}, {'$set': found_user})
 
-'''
-  saveSong: (req) => {
-    let { email, song, artist } = req;
-    return User.findOne({ email: email })
-      .then((foundUser) => {
-        foundUser.songs.push({
-          name: song,
-          artist: artist,
-          completed: false,
-          notes: ''
-        });
-        return foundUser.save();
-      });
-  },
-  getSongs: (email) => {
-    return User.findOne({ email: email })
-      .exec()
-      .then((foundUser) => {
-        return foundUser;
-      });
-  },
-  deleteSong: (email, song, artist) => {
-    return User.findOne({ email: email })
-      .then((foundUser) => {
-        foundUser.songs = foundUser.songs.filter((s) => !(s.name === song && s.artist === artist));
-        return foundUser.save();
-      });
-  },
-  updateSong: (email, song, artist) => {
-    const query = {email: email, 'songs.name': song, 'songs.artist': artist};
-    const update = {$set: {'songs.$.completed': {$not: '$songs.$.completed'}}};
-    return User.findOneAndUpdate(query, update, {new: true});
-  },
-  updateNotes: (email, song, artist, notes) => {
-    const query = { email: email, 'songs.name': song, 'songs.artist': artist };
-    const update = { $set: { 'songs.$.notes': notes } };
-    return User.findOneAndUpdate(query, update, { new: true });
-  }
-};
-'''
+def get_songs (email):
+   found_user = collection.find_one({email: email})
+   if found_user:
+      return found_user
+
+def delete_song (email, song, artist):
+   found_user = collection.find_one({email: email})
+   if found_user:
+      found_user.songs = [s for s in found_user.songs if not (s['name'] == song and s['artist'] == artist)]
+      found_user.save()
