@@ -1,33 +1,35 @@
-from flask import Flask
-
-app = Flask(__name__)
-
-@app.route('/')
-def hello():
-    print('Visited localhost:3000')
-    return 'Hello, World!'
-
-if __name__ == '__main__':
-    print('Starting the Flask server')
-    app.run(port=3000)
-
-
-# from flask import Flask, request, jsonify, send_from_directory
-# import os
+# from flask import Flask
 
 # app = Flask(__name__)
+
+# @app.route('/')
+# def hello():
+#     print('Visited localhost:3000')
+#     return 'Hello, World!'
+
+# if __name__ == '__main__':
+#     print('Starting the Flask server')
+#     app.run(port=3000)
+
+
+from flask import Flask, render_template, request, jsonify, send_from_directory
+import os
+
+app = Flask(__name__)
 
 
 # from controllers import get_songs, add_song, delete_song, create_user
 
-# import logging
-# logger = logging.getLogger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 # # Serve static files from the 'client/dist' directory
 
-# @app.route('/', methods=['GET'])
-# def serve_index():
-#     return 'I am serving'
+
+@app.route('/')
+def serve_index():
+    dist_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'client', 'dist'))
+    return send_from_directory(dist_dir, 'index.html')
 
 # @app.route('/findBand', methods=['POST'])
 # def find_band():
