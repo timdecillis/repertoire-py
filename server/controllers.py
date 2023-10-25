@@ -1,55 +1,55 @@
 import os
 import json
-from openai import Configuration, OpenAIApi
+# from openai import Configuration, OpenAIApi
 from models import get_songs, save_song, delete_song, create_user
 
-configuration = Configuration(
-    api_key=os.environ.get('API_KEY')
-)
-openai = OpenAIApi(configuration)
+# configuration = Configuration(
+#     api_key=os.environ.get('API_KEY')
+# )
+# openai = OpenAIApi(configuration)
 
-def find_band(req, res):
-    if not configuration.api_key:
-        res.status(500).json({
-            'error': {
-                'message': 'OpenAI API key not configured, please follow instructions in README.md',
-            }
-        })
-        return
+# def find_band(req, res):
+#     if not configuration.api_key:
+#         res.status(500).json({
+#             'error': {
+#                 'message': 'OpenAI API key not configured, please follow instructions in README.md',
+#             }
+#         })
+#         return
 
-    band = req.get('band', '')
-    instrument = req.get('instrument', '')
-    difficulty = req.get('difficulty', '')
+#     band = req.get('band', '')
+#     instrument = req.get('instrument', '')
+#     difficulty = req.get('difficulty', '')
 
-    if not band.strip():
-        res.status(400).json({
-            'error': {
-                'message': 'Please enter a valid band',
-            }
-        })
-        return
+#     if not band.strip():
+#         res.status(400).json({
+#             'error': {
+#                 'message': 'Please enter a valid band',
+#             }
+#         })
+#         return
 
-    try:
-        completion = openai.create_chat_completion(
-            model='gpt-3.5-turbo',
-            messages=[
-                {'role': 'system', 'content': 'You are a helpful assistant.'},
-                {'role': 'user', 'content': generate_prompt(band, instrument, difficulty)},
-            ],
-            temperature=0
-        )
-        res.status(200).json(json.loads(completion['choices'][0]['message']['content']))
-    except Exception as error:
-        if hasattr(error, 'response'):
-            print(error.response.status, error.response.data)
-            res.status(error.response.status).json(error.response.data)
-        else:
-            print(f'Error with OpenAI API request: {str(error)}')
-            res.status(500).json({
-                'error': {
-                    'message': 'An error occurred during your request.',
-                }
-            })
+#     try:
+#         completion = openai.create_chat_completion(
+#             model='gpt-3.5-turbo',
+#             messages=[
+#                 {'role': 'system', 'content': 'You are a helpful assistant.'},
+#                 {'role': 'user', 'content': generate_prompt(band, instrument, difficulty)},
+#             ],
+#             temperature=0
+#         )
+#         res.status(200).json(json.loads(completion['choices'][0]['message']['content']))
+#     except Exception as error:
+#         if hasattr(error, 'response'):
+#             print(error.response.status, error.response.data)
+#             res.status(error.response.status).json(error.response.data)
+#         else:
+#             print(f'Error with OpenAI API request: {str(error)}')
+#             res.status(500).json({
+#                 'error': {
+#                     'message': 'An error occurred during your request.',
+#                 }
+#             })
 
 def create_user(req, res):
     email = req.get('email', '')

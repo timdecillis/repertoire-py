@@ -4,15 +4,16 @@ import os
 app = Flask(__name__)
 
 
-from controllers import find_band, get_songs, add_song, delete_song, update_song, update_notes, create_user
+from controllers import get_songs, add_song, delete_song, create_user
 
 import logging
 logger = logging.getLogger(__name__)
 
 # Serve static files from the 'client/dist' directory
-@app.route('/static/<path:filename>')
-def send_static(filename):
-    return send_from_directory('client/dist', filename)
+
+@app.route('/', methods=['GET'])
+def serve_index():
+    print('I am serving')
 
 @app.route('/findBand', methods=['POST'])
 def find_band():
@@ -77,5 +78,6 @@ def update_notes():
         return jsonify({'error': str(e)})
 
 if __name__ == '__main__':
+    app.debug = True
     print('Starting the Flask server')
     app.run(port=3000)
