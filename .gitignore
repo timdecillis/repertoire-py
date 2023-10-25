@@ -4,3 +4,5 @@ bundle.js
 bundle.js.map
 
 node_modules/
+__pycache__/
+package-lock.json
